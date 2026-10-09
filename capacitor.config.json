@@ -1,0 +1,8 @@
+{
+  "appId": "com.velora.ai",
+  "appName": "Velora AI",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}

@@ -8,9 +8,14 @@
     "build": "vite build",
     "lint": "eslint .",
     "test": "node --test",
+    "build:android": "node scripts/build-android.mjs",
+    "android:open": "cap open android",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/cli": "^8.5.3",
+    "@capacitor/core": "^8.5.3",
     "@google/genai": "^2.27.0",
     "@huggingface/transformers": "^4.3.1",
     "@react-oauth/google": "^0.13.5",

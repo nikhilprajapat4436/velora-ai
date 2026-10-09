@@ -1,0 +1,69 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/build-android-apk.yml"
+      - ".env.android"
+      - "android/**"
+      - "capacitor.config.json"
+      - "index.html"
+      - "package.json"
+      - "package-lock.json"
+      - "public/**"
+      - "scripts/build-android.mjs"
+      - "src/**"
+      - "vite.config.js"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Set up Java
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build and sync Android web assets
+        run: npm run build:android
+
+      - name: Assemble installable test APK
+        run: bash android/gradlew --no-daemon -p android assembleDebug
+
+      - name: Upload APK workflow artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: VeloraAI-debug-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish the latest test APK download
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          APK_PATH: android/app/build/outputs/apk/debug/app-debug.apk
+          RELEASE_TAG: android-v${{ github.run_number }}
+        run: |
+          gh release create "$RELEASE_TAG" "$APK_PATH#VeloraAI.apk" \
+            --title "Velora AI Android $RELEASE_TAG" \
+            --notes "Installable debug-signed test APK. Android may ask you to allow this browser to install apps. Remove the previous test build before installing a future build." \
+            --latest

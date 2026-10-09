@@ -80,11 +80,25 @@ The Express server can serve both the built React app and the API from one Node 
 
 The repository also includes a multi-stage `Dockerfile` for container hosts. Build with `docker build -t velora-ai .`, then run with the required environment variables supplied by the host (never copy `.env` into the image). Map the host port to container port `5000`; the server reads the platform-provided `PORT`.
 
-When the frontend is served by this same Express process, it uses same-origin `/api` requests and needs no `VITE_API_URL`. For separate frontend hosting, set `VITE_API_URL` at build time and configure `CORS_ORIGINS` on the backend. `CORS_ORIGINS` is intentionally empty by default in production.
+When the frontend is served by this same Express process, it uses same-origin `/api` requests and needs no `VITE_API_URL`. For separate frontend hosting, set `VITE_API_URL` at build time and configure `CORS_ORIGINS` on the backend. `CORS_ORIGINS` is empty by default for a single-origin web deployment; the Render Blueprint explicitly allows `https://localhost` for the Capacitor Android app.
 
 Production startup refuses to run if the database/provider secrets are missing or `JWT_SECRET` is shorter than 32 characters. Generate a new secret with `node -e "console.log(require('node:crypto').randomBytes(48).toString('hex'))"` and add it directly to the hosting secret settings.
 
 Image generation is limited to five requests per authenticated account per 15 minutes per server process to protect the provider quota. If deploying multiple backend instances, use a shared rate-limit store at the hosting layer. Keep database network access restricted to the backend host and configure Google OAuth with the deployed frontend origin if Google sign-in is enabled.
+
+## Android APK
+
+The Android app uses Capacitor to package the built React interface. Its API requests go to the deployed Render backend configured in `.env.android`; this file contains only the public API URL, never credentials. The Render service must allow the Capacitor WebView origin `https://localhost` through `CORS_ORIGINS`.
+
+Requirements for a local APK build: Node.js 22 or newer, Android Studio 2025.2.1 or newer, and an Android SDK (API 24 or newer). Then run:
+
+```bash
+npm install
+npm run build:android
+npm run android:open
+```
+
+In Android Studio, build the APK from **Build → Build Bundle(s) / APK(s) → Build APK(s)**. The website shows an Android-only download banner; its link points to the latest `VeloraAI.apk` GitHub Release. The `Build Android APK` workflow creates that installable debug-signed test APK on pushes to `main` and can also be started manually from GitHub Actions. The GitHub repository must be public for anyone to download the release. Android may ask users to allow installs from their browser. This debug build is for testing, not Google Play distribution; a release signing key is needed for a production release. Re-run `npm run build:android` after web app changes so the Android project receives the updated build.
 
 ### Render test deployment
 

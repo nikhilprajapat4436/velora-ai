@@ -5,6 +5,7 @@ import Documents from "./components/Documents/Documents";
 import RegisterPage from "./pages/RegisterPage";
 import AuthIntro from "./components/Auth/AuthIntro";
 import LoadingAnimation from "./components/LoadingAnimation";
+import AndroidDownloadPrompt from "./components/AndroidDownloadPrompt";
 import { applyThemePalette, getSavedThemePalette } from "./themePalettes";
 import { apiUrl } from "./api";
 import { lazy, Suspense, useState, useRef, useEffect, useMemo, useCallback } from "react";
@@ -624,6 +625,7 @@ function App() {
             onLogin={() => setAuthPage("login")}
             onRegisterSuccess={handleAuthenticated}
           />
+          <AndroidDownloadPrompt />
           {authIntroStage !== "done" && <AuthIntro isLeaving={authIntroStage === "reveal"} />}
         </>
       );
@@ -636,6 +638,7 @@ function App() {
           onLoginSuccess={handleAuthenticated}
           isIntroRevealing={authIntroStage === "reveal"}
         />
+        <AndroidDownloadPrompt />
         {authIntroStage !== "done" && <AuthIntro isLeaving={authIntroStage === "reveal"} />}
       </>
     );
@@ -756,6 +759,7 @@ function App() {
 
   return (
     <div className={`app${isLoggingOut ? " app-logging-out" : ""}`}>
+      <AndroidDownloadPrompt />
       <Sidebar
         onNewChat={handleNewChat}
           onOpenChat={handleOpenChat}
