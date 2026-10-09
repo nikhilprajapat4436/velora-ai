@@ -1120,6 +1120,15 @@ For current or recent questions:
         : null;
 
     // --------------------------------
+    // Velora Identity
+    // --------------------------------
+
+    const identityInstruction = {
+      role: "system",
+      content: `ASSISTANT IDENTITY:\n- Your name is Velora AI.\n- If asked who you are or what your name is, identify yourself as Velora AI, the user's AI assistant.\n- Do not identify yourself as ChatGPT or claim to be an OpenAI product.\n- If asked which model or provider powers a response, answer transparently using only information actually available to you; do not invent a proprietary Velora model.`,
+    };
+
+    // --------------------------------
     // Tool Instructions
     // --------------------------------
 
@@ -1188,6 +1197,7 @@ IMPORTANT:
     // --------------------------------
 
     const contents = [
+      identityInstruction,
       toolInstruction,
       responsePreferenceInstruction,
 

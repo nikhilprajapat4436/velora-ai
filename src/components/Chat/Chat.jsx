@@ -1762,6 +1762,7 @@ function Chat({
 
           <div className="suggestion-list">
             <button
+              type="button"
               className="suggestion-btn"
               onClick={() =>
                 handleSend(
@@ -1773,6 +1774,7 @@ function Chat({
             </button>
 
             <button
+              type="button"
               className="suggestion-btn"
               onClick={() =>
                 handleSend(
@@ -1784,6 +1786,7 @@ function Chat({
             </button>
 
             <button
+              type="button"
               className="suggestion-btn"
               onClick={() =>
                 handleSend(
