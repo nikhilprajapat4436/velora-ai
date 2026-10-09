@@ -39,14 +39,19 @@ if (process.env.NODE_ENV === "production") {
     ["GROQ_API_KEY", Boolean(process.env.GROQ_API_KEY)],
     ["CLOUDFLARE_ACCOUNT_ID", Boolean(process.env.CLOUDFLARE_ACCOUNT_ID)],
     ["CLOUDFLARE_API_TOKEN", Boolean(process.env.CLOUDFLARE_API_TOKEN)],
-    ["JWT_SECRET (at least 32 characters)", Boolean(process.env.JWT_SECRET && process.env.JWT_SECRET.length >= 32)],
+    [
+      "JWT_SECRET (at least 32 characters)",
+      Boolean(process.env.JWT_SECRET && process.env.JWT_SECRET.length >= 32),
+    ],
   ];
   const missingRequirements = productionRequirements
     .filter(([, configured]) => !configured)
     .map(([name]) => name);
 
   if (missingRequirements.length) {
-    console.error(`Production startup blocked. Configure: ${missingRequirements.join(", ")}`);
+    console.error(
+      `Production startup blocked. Configure: ${missingRequirements.join(", ")}`,
+    );
     process.exit(1);
   }
 }
@@ -151,10 +156,13 @@ const getToolLabel = (toolName, type = "start") => {
 
 const getWebSearchOptions = (query, maxResults = 5) => {
   const text = query.toLowerCase();
-  const isNewsQuery =
-    /\bnews\b|\bheadlines?\b|समाचार|ख़बर|खबरें|खबरों/.test(text);
+  const isNewsQuery = /\bnews\b|\bheadlines?\b|समाचार|ख़बर|खबरें|खबरों/.test(
+    text,
+  );
   const isFreshQuery =
-    /\btoday\b|\btonight\b|\bcurrent(?:ly)?\b|\blatest\b|\brecent\b|\bnow\b|\baaj\b|आज|ताज़ा|ताजा/.test(text);
+    /\btoday\b|\btonight\b|\bcurrent(?:ly)?\b|\blatest\b|\brecent\b|\bnow\b|\baaj\b|आज|ताज़ा|ताजा/.test(
+      text,
+    );
 
   return {
     maxResults,
@@ -216,7 +224,7 @@ const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
 });
 
-app.get("/", (req, res) => {
+app.get("/api/status", (_req, res) => {
   res.json({
     message: "Velora AI backend is running",
   });
@@ -528,10 +536,7 @@ const createAvailableTools = (userId, fallbackDocumentQuery = "") => {
 
       const safeMaxResults = Math.min(Math.max(Number(maxResults) || 5, 1), 5);
 
-      return await searchWeb(
-        query,
-        getWebSearchOptions(query, safeMaxResults),
-      );
+      return await searchWeb(query, getWebSearchOptions(query, safeMaxResults));
     },
 
     convert_currency: async ({ amount, from, to }) => {
@@ -560,9 +565,10 @@ const createAvailableTools = (userId, fallbackDocumentQuery = "") => {
     search_documents: async ({ query, maxResults = 5 }) => {
       return await searchDocumentTool({
         userId,
-        query: typeof query === "string" && query.trim()
-          ? query.trim()
-          : fallbackDocumentQuery,
+        query:
+          typeof query === "string" && query.trim()
+            ? query.trim()
+            : fallbackDocumentQuery,
         maxResults,
       });
     },
@@ -900,10 +906,7 @@ app.post("/api/chat", authMiddleware, async (req, res) => {
       });
 
       try {
-        webResults = await searchWeb(
-          message,
-          getWebSearchOptions(message, 5),
-        );
+        webResults = await searchWeb(message, getWebSearchOptions(message, 5));
 
         console.log(`Web Search: enabled | Results: ${webResults.length}`);
 
@@ -1156,13 +1159,16 @@ IMPORTANT:
     const preferenceOptions = {
       language: {
         auto: "Reply in the language used by the user in their latest message.",
-        english: "Reply in English unless the user explicitly asks for another language.",
-        hindi: "Reply in Hindi unless the user explicitly asks for another language.",
+        english:
+          "Reply in English unless the user explicitly asks for another language.",
+        hindi:
+          "Reply in Hindi unless the user explicitly asks for another language.",
       },
       length: {
         concise: "Keep the answer concise and include only the useful details.",
         balanced: "Use a balanced level of detail appropriate to the question.",
-        detailed: "Give a thorough answer with useful context and clear steps when appropriate.",
+        detailed:
+          "Give a thorough answer with useful context and clear steps when appropriate.",
       },
       tone: {
         friendly: "Use a friendly, approachable tone.",
@@ -1242,7 +1248,9 @@ IMPORTANT:
     // Select AI Model
     // --------------------------------
 
-    const requestedModel = ["openai/gpt-oss-120b", "qwen/qwen3.8-27b"].includes(safePreferences.model)
+    const requestedModel = ["openai/gpt-oss-120b", "qwen/qwen3.8-27b"].includes(
+      safePreferences.model,
+    )
       ? safePreferences.model
       : "openai/gpt-oss-120b";
     const model = image ? "qwen/qwen3.8-27b" : requestedModel;
@@ -1261,7 +1269,9 @@ IMPORTANT:
       ? []
       : memoryEnabled
         ? toolDefinitions
-        : toolDefinitions.filter((tool) => tool.function.name !== "search_memory");
+        : toolDefinitions.filter(
+            (tool) => tool.function.name !== "search_memory",
+          );
 
     if (image) {
       console.log("Image analysis request started");
@@ -1355,7 +1365,10 @@ IMPORTANT:
                 });
               }
             } catch (sourceError) {
-              console.warn("Could not publish web search sources:", sourceError);
+              console.warn(
+                "Could not publish web search sources:",
+                sourceError,
+              );
             }
           }
 
@@ -1389,7 +1402,10 @@ IMPORTANT:
                 });
               }
             } catch (sourceError) {
-              console.warn("Could not publish document search sources:", sourceError);
+              console.warn(
+                "Could not publish document search sources:",
+                sourceError,
+              );
             }
           }
 
@@ -1518,11 +1534,14 @@ IMPORTANT:
 });
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(frontendBuildDirectory, {
-    setHeaders(response, filePath) {
-      if (filePath.endsWith("index.html")) response.setHeader("Cache-Control", "no-cache");
-    },
-  }));
+  app.use(
+    express.static(frontendBuildDirectory, {
+      setHeaders(response, filePath) {
+        if (filePath.endsWith("index.html"))
+          response.setHeader("Cache-Control", "no-cache");
+      },
+    }),
+  );
 
   app.use((req, res, next) => {
     if (req.method === "GET" && !req.path.startsWith("/api")) {
