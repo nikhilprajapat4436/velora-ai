@@ -1,0 +1,442 @@
+.memory-management {
+  flex: 1;
+  min-width: 0;
+  height: 100vh;
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 40px;
+  background: var(--app-bg);
+  color: var(--app-text);
+}
+
+.memory-header {
+  max-width: 900px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  margin: 0 auto 32px;
+}
+
+.memory-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 30px;
+  padding: 9px 14px;
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+  background: var(--app-surface);
+  color: var(--app-text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+  grid-column: 1 / -1;
+  justify-self: start;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.memory-back-btn:hover {
+  background: var(--app-surface-raised);
+  color: var(--app-text);
+  border-color: var(--app-border);
+}
+
+.memory-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.memory-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: rgba(var(--app-accent-rgb), 0.1);
+  color: var(--app-icon);
+  border: 1px solid rgba(var(--app-accent-rgb), 0.18);
+}
+
+.memory-title h2 {
+  margin: 0 0 6px;
+  font-size: 25px;
+  font-weight: 600;
+}
+
+.memory-title p {
+  margin: 0;
+  color: var(--app-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.memory-list {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.memory-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 20px;
+  margin-bottom: 12px;
+  border: 1px solid var(--app-border);
+  border-radius: 14px;
+  background: var(--app-surface);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.memory-clear-all-btn {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 11px;
+  border: 1px solid var(--app-danger-border);
+  border-radius: 9px;
+  background: var(--app-danger-bg);
+  color: var(--app-danger);
+  font-size: 11px;
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.memory-clear-all-btn:hover {
+  border-color: var(--app-danger-hover-border);
+  background: var(--app-danger-hover-bg);
+}
+
+.memory-card.editing {
+  align-items: flex-start;
+  border-color: rgba(var(--app-accent-rgb), 0.28);
+  background: rgba(var(--app-accent-rgb), 0.035);
+}
+
+.memory-card:hover {
+  background: var(--app-surface-raised);
+  border-color: var(--app-accent);
+  transform: translateY(-1px);
+}
+
+.memory-content {
+  min-width: 0;
+  flex: 1;
+}
+
+.memory-edit-input {
+  width: 100%;
+  min-height: 92px;
+  margin: 0 0 12px;
+  padding: 11px 12px;
+  border: 1px solid var(--app-border);
+  border-radius: 9px;
+  outline: none;
+  resize: vertical;
+  background: var(--app-bg);
+  color: var(--app-text);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.memory-edit-input:focus {
+  border-color: var(--app-icon);
+  box-shadow: 0 0 0 3px rgba(var(--app-accent-rgb), 0.1);
+}
+
+.memory-actions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.memory-edit-btn,
+.memory-save-btn,
+.memory-cancel-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(var(--app-accent-rgb), 0.15);
+  border-radius: 9px;
+  background: rgba(var(--app-accent-rgb), 0.06);
+  color: var(--app-icon);
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.memory-edit-btn:hover,
+.memory-save-btn:hover:not(:disabled) {
+  border-color: rgba(var(--app-accent-rgb), 0.35);
+  background: rgba(var(--app-accent-rgb), 0.14);
+  color: var(--app-accent-hover);
+}
+
+.memory-cancel-btn {
+  border-color: var(--app-border);
+  background: var(--app-button-secondary);
+  color: var(--app-button-secondary-text);
+}
+
+.memory-cancel-btn:hover:not(:disabled) {
+  background: var(--app-surface-raised);
+  color: var(--app-text);
+}
+
+.memory-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.memory-action-error {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--app-danger-border);
+  border-radius: 9px;
+  background: var(--app-danger-bg);
+  color: var(--app-danger);
+  font-size: 12px;
+}
+
+.memory-confirm-overlay {
+  position: fixed;
+  z-index: 3000;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: var(--app-overlay);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.memory-confirm-dialog {
+  width: 100%;
+  max-width: 400px;
+  padding: 25px;
+  border: 1px solid var(--app-border);
+  border-radius: 16px;
+  background: var(--app-surface);
+  color: var(--app-text);
+  box-shadow: 0 22px 65px var(--app-shadow-color);
+}
+
+.memory-confirm-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 16px;
+  border: 1px solid var(--app-danger-border);
+  border-radius: 12px;
+  background: var(--app-danger-bg);
+  color: var(--app-danger);
+}
+
+.memory-confirm-dialog h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.memory-confirm-dialog p {
+  margin: 9px 0 0;
+  color: var(--app-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.memory-confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  margin-top: 22px;
+}
+
+.memory-confirm-actions button {
+  min-height: 38px;
+  padding: 0 13px;
+  border: 1px solid var(--app-border);
+  border-radius: 8px;
+  color: var(--app-text-secondary);
+  font-size: 11px;
+}
+
+.memory-confirm-actions button:hover:not(:disabled) {
+  background: var(--app-surface-raised);
+}
+
+.memory-confirm-actions .memory-confirm-delete {
+  border-color: var(--app-danger-border);
+  background: var(--app-danger-bg);
+  color: var(--app-danger);
+}
+
+.memory-confirm-actions .memory-confirm-delete:hover:not(:disabled) {
+  background: var(--app-danger-hover-bg);
+}
+
+.memory-confirm-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.memory-content p {
+  margin: 0 0 12px;
+  color: var(--app-text);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.memory-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.memory-meta span {
+  padding: 4px 9px;
+  border-radius: 6px;
+  background: var(--app-surface-raised);
+  color: var(--app-muted);
+  font-size: 11px;
+  text-transform: capitalize;
+}
+
+.memory-delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border: 1px solid var(--app-danger-border);
+  border-radius: 9px;
+  background: var(--app-danger-bg);
+  color: var(--app-danger);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.memory-delete-btn:hover {
+  background: var(--app-danger-hover-bg);
+  border-color: var(--app-danger-hover-border);
+  color: var(--app-danger);
+}
+
+.memory-delete-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.memory-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+  padding: 40px;
+  border: 1px dashed var(--app-border);
+  border-radius: 16px;
+  background: var(--app-surface);
+  color: var(--app-muted);
+  text-align: center;
+}
+
+.memory-empty svg {
+  margin-bottom: 14px;
+  color: var(--app-icon);
+  opacity: 0.7;
+}
+
+.memory-empty h3 {
+  margin: 0 0 7px;
+  color: var(--app-text-secondary);
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.memory-empty p {
+  max-width: 420px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .memory-management {
+    padding: 25px 18px;
+  }
+
+  .memory-title h2 {
+    font-size: 22px;
+  }
+
+  .memory-title p {
+    font-size: 13px;
+  }
+
+  .memory-card {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .memory-management {
+    padding: 20px 14px;
+  }
+
+  .memory-back-btn {
+    margin-bottom: 22px;
+  }
+
+  .memory-header {
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 8px;
+  }
+
+  .memory-clear-all-btn {
+    min-height: 34px;
+    padding: 0 8px;
+    font-size: 10px;
+  }
+
+  .memory-title {
+    gap: 11px;
+  }
+
+  .memory-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .memory-title h2 {
+    font-size: 20px;
+  }
+
+  .memory-card {
+    align-items: flex-start;
+  }
+
+  .memory-content p {
+    font-size: 14px;
+  }
+}

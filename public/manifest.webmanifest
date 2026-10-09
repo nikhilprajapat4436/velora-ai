@@ -1,0 +1,18 @@
+{
+  "name": "Velora AI",
+  "short_name": "Velora",
+  "description": "Your personal AI assistant for conversations, images and ideas",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0b0f17",
+  "theme_color": "#0b0f17",
+  "icons": [
+    {
+      "src": "/pwa-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+.image-creation-card {
+  position: relative;
+  z-index: 1;
+  width: min(510px, calc(100% - 36px));
+  margin: 14px auto 28px;
+  padding: 14px;
+  border: 1px solid color-mix(in srgb, var(--app-ai-glow) 24%, var(--app-border));
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--app-animation-card, var(--app-surface)) 92%, transparent);
+  box-shadow: 0 18px 55px rgba(0,0,0,.16), 0 0 28px rgba(var(--app-accent-rgb), .06);
+  animation: creation-enter .55s cubic-bezier(.2,.7,.2,1) both;
+}
+.image-creation-heading { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.image-creation-mark { display: grid; place-items: center; width: 31px; height: 31px; flex: 0 0 auto; border: 1px solid color-mix(in srgb, var(--app-ai-glow) 35%, transparent); border-radius: 10px; color: var(--app-icon); background: color-mix(in srgb, var(--app-ai-glow) 12%, transparent); }
+.image-creation-heading div { min-width: 0; display: grid; gap: 3px; }
+.image-creation-heading strong { color: var(--app-animation-text, var(--app-text)); font-size: 12px; font-weight: 600; }
+.image-creation-heading span:not(.image-creation-mark) { overflow: hidden; color: var(--app-animation-muted, var(--app-muted)); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.image-creation-canvas { position: relative; height: clamp(185px, 34vw, 300px); overflow: hidden; isolation: isolate; border: 1px solid color-mix(in srgb, var(--app-ai-glow) 36%, transparent); border-radius: 12px; background: radial-gradient(ellipse at 50% 52%, color-mix(in srgb, var(--app-ai-primary) 48%, transparent), transparent 70%), radial-gradient(ellipse at 50% 48%, color-mix(in srgb, var(--app-ai-glow) 15%, transparent), transparent 56%), linear-gradient(145deg, color-mix(in srgb, var(--app-ai-particle) 7%, transparent), transparent 55%), var(--app-image-container, var(--app-animation-surface)); box-shadow: inset 0 0 34px color-mix(in srgb, var(--app-ai-glow) 10%, transparent); }
+.image-creation-canvas::before { position: absolute; inset: 0; content: ""; opacity: .18; background-image: radial-gradient(var(--app-ai-particle) .6px, transparent .6px); background-size: 15px 15px; mask-image: radial-gradient(ellipse, black, transparent 72%); }
+.creation-energy { position: absolute; inset: 13% 20%; border-radius: 50%; background: radial-gradient(ellipse, color-mix(in srgb, var(--app-ai-glow) 24%, transparent), transparent 68%); filter: blur(12px); animation: creation-energy 5s ease-in-out infinite; }
+.creation-shape { position: absolute; left: 50%; top: 50%; border: 1px solid color-mix(in srgb, var(--app-ai-network) 34%, transparent); opacity: .25; transform: translate(-50%,-50%); transition: all 1.8s cubic-bezier(.2,.7,.2,1); }
+.creation-shape-one { width: 25%; aspect-ratio: 1; border-radius: 46% 54% 62% 38% / 42% 48% 52% 58%; background: radial-gradient(ellipse at 35% 30%, color-mix(in srgb, var(--app-ai-particle) 34%, transparent), color-mix(in srgb, var(--app-ai-glow) 21%, transparent) 42%, transparent 70%); box-shadow: 0 0 35px color-mix(in srgb, var(--app-ai-primary) 24%, transparent); }
+.creation-shape-two { width: 40%; aspect-ratio: 1.4; border-radius: 50%; border-color: color-mix(in srgb, var(--app-ai-particle) 34%, var(--app-ai-network)); transform: translate(-50%,-50%) rotate(-25deg); box-shadow: inset 0 0 28px color-mix(in srgb, var(--app-ai-primary) 14%, transparent); }
+.image-phase-processing .creation-shape-one,.image-phase-rendering .creation-shape-one { width: 38%; opacity: .54; }
+.image-phase-understanding .creation-shape-one { width: 18%; opacity: .16; }
+.image-phase-understanding .creation-shape-two { width: 30%; opacity: .14; }
+.image-phase-processing .creation-shape-two,.image-phase-rendering .creation-shape-two { width: 56%; opacity: .42; }
+.image-phase-rendering .creation-shape-one { width: 45%; border-radius: 50% 42% 48% 56%; }
+.creation-scan { position: absolute; z-index: 2; left: 0; right: 0; top: -25%; height: 28%; opacity: .52; background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--app-ai-particle) 23%, transparent), color-mix(in srgb, var(--app-ai-glow) 18%, transparent), transparent); animation: creation-scan 4.8s ease-in-out infinite; }
+.creation-particle { position: absolute; z-index: 3; width: 3px; height: 3px; border-radius: 50%; background: var(--app-ai-particle); box-shadow: 0 0 9px var(--app-ai-glow); opacity: .7; animation: creation-drift 4s ease-in-out infinite; }
+.particle-one { left: 18%; top: 28%; --dx: 45px; --dy: 28px; }.particle-two { left: 78%; top: 30%; --dx: -48px; --dy: 45px; animation-delay: -1.3s; }.particle-three { left: 24%; top: 74%; --dx: 55px; --dy: -38px; animation-delay: -2.1s; }.particle-four { left: 73%; top: 72%; --dx: -42px; --dy: -35px; animation-delay: -.7s; }
+.creation-corner { position: absolute; z-index: 4; width: 11px; height: 11px; opacity: .45; border-color: var(--app-ai-glow); }.corner-one { inset: 9px auto auto 9px; border-top: 1px solid; border-left: 1px solid; }.corner-two { inset: 9px 9px auto auto; border-top: 1px solid; border-right: 1px solid; }.corner-three { inset: auto auto 9px 9px; border-bottom: 1px solid; border-left: 1px solid; }.corner-four { inset: auto 9px 9px auto; border-right: 1px solid; border-bottom: 1px solid; }
+.image-creation-footer { display: flex; align-items: center; gap: 7px; padding: 10px 2px 0; color: var(--app-animation-muted, var(--app-muted)); font-size: 10px; letter-spacing: .02em; }
+.creation-state-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--app-ai-glow); box-shadow: 0 0 8px var(--app-ai-glow); animation: creation-dot 2s ease-in-out infinite; }
+@keyframes creation-enter { from { opacity: 0; transform: translateY(10px) scale(.985); } to { opacity: 1; transform: none; } }
+@keyframes creation-energy { 0%,100% { opacity: .55; transform: scale(.9); } 50% { opacity: 1; transform: scale(1.08); } }
+@keyframes creation-scan { 0% { transform: translateY(0); } 100% { transform: translateY(480%); } }
+@keyframes creation-drift { 0%,100% { transform: translate(0,0); opacity: .25; } 50% { transform: translate(var(--dx),var(--dy)); opacity: .9; } }
+@keyframes creation-dot { 0%,100% { opacity: .5; } 50% { opacity: 1; } }
+@media (max-width: 520px) { .image-creation-card { width: calc(100% - 24px); margin: 10px auto 20px; padding: 11px; } .image-creation-canvas { height: 210px; } }
+@media (prefers-reduced-motion: reduce) { .image-creation-card, .creation-energy, .creation-scan, .creation-particle, .creation-state-dot { animation: none; } .creation-particle { opacity: .35; } .creation-scan { top: 45%; } }

@@ -1,0 +1,1259 @@
+.input-box {
+  width: 100%;
+  max-width: 848px;
+  margin: 0 auto;
+  padding: 16px 24px 24px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  border-top: 1px solid var(--app-border);
+}
+
+/* =========================
+   TEXTAREA
+========================= */
+
+.input-box textarea {
+  flex: 1;
+  min-width: 0;
+  min-height: 46px;
+  max-height: 140px;
+  padding: 12px 16px;
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+  outline: none;
+  resize: none;
+  background: var(--app-surface);
+  color: var(--app-text);
+  font-size: 14px;
+  line-height: 1.5;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.input-box textarea::-webkit-scrollbar {
+  display: none;
+}
+
+.input-box textarea:focus {
+  border-color: var(--app-focus);
+  background: var(--app-input-bg);
+  box-shadow:
+    0 0 0 2px rgba(var(--app-accent-rgb), 0.08);
+}
+
+.input-box textarea::placeholder {
+  color: var(--app-muted);
+}
+
+/* =========================
+   SEND BUTTON
+========================= */
+
+.send-btn {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--app-button-action);
+  color: var(--app-button-action-text);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
+}
+
+.send-btn:hover:not(:disabled) {
+  background: var(--app-accent-hover);
+  transform: translateY(-1px);
+  box-shadow:
+    0 6px 18px rgba(var(--app-accent-rgb), 0.15);
+}
+
+.send-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.send-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+  .input-box {
+    padding: 12px 14px max(12px, env(safe-area-inset-bottom));
+  }
+
+  .input-box textarea {
+    min-height: 44px;
+    padding: 11px 14px;
+    font-size: 14px;
+  }
+
+  .send-btn {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .input-box {
+    padding: 9px 10px max(10px, env(safe-area-inset-bottom));
+    gap: 8px;
+  }
+
+  .input-box textarea {
+    min-height: 44px;
+    padding: 11px 12px;
+    font-size: 14px;
+    border-radius: 9px;
+  }
+
+  .send-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 9px;
+  }
+}
+
+/* =========================
+   INPUT BOX ANIMATION
+========================= */
+
+.input-box {
+  animation: inputBoxAppear 0.4s ease-out;
+}
+
+@keyframes inputBoxAppear {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   INPUT CONTROLS
+========================= */
+
+.input-controls {
+  width: 100%;
+  min-width: 0;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.input-controls textarea {
+  flex: 1;
+}
+
+/* =========================
+   ATTACH BUTTON
+========================= */
+
+.attach-btn {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+  background: var(--app-surface);
+  color: var(--app-muted);
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+
+.attach-btn:hover:not(:disabled) {
+  color: var(--app-icon);
+  border-color: var(--app-icon);
+  background: var(--app-surface-raised);
+  transform: translateY(-1px);
+}
+
+.attach-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* =========================
+   PDF ATTACHMENT
+========================= */
+
+.selected-file {
+  width: auto;
+  max-width: 300px;
+
+  margin: 0 0 8px 0;
+  padding: 6px 8px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+
+  background: var(--app-surface);
+  color: var(--app-text);
+
+  overflow: hidden;
+
+  animation: attachmentIn 0.25s ease-out;
+}
+
+.selected-file-info {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+}
+
+.selected-file-info svg {
+  flex-shrink: 0;
+  color: var(--app-icon);
+}
+
+.selected-file-info span {
+  max-width: 210px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: 12px;
+}
+
+.remove-file-btn {
+  width: 25px;
+  height: 25px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 6px;
+
+  background: transparent;
+  color: var(--app-muted);
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+
+.remove-file-btn:hover {
+  color: var(--app-icon);
+  background: var(--app-surface-raised);
+}
+
+.remove-file-btn:active {
+  transform: scale(0.9);
+}
+
+/* =========================
+   IMAGE ATTACHMENT
+========================= */
+
+.selected-image {
+  width: 240px;
+  max-width: 100%;
+
+  min-height: 58px;
+
+  padding: 6px 8px;
+
+  margin: 0 0 8px 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+
+  background: var(--app-surface);
+
+  overflow: hidden;
+
+  animation: attachmentIn 0.25s ease-out;
+
+  box-sizing: border-box;
+}
+
+/* =========================
+   IMAGE THUMBNAIL
+========================= */
+
+.selected-image-preview {
+  width: 48px;
+  height: 48px;
+
+  min-width: 48px;
+
+  border-radius: 7px;
+
+  overflow: hidden;
+
+  background: var(--app-surface-raised);
+
+  position: relative;
+}
+
+.selected-image-preview::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background: linear-gradient(
+    110deg,
+    transparent 20%,
+    var(--app-animation-ink) 50%,
+    transparent 80%
+  );
+
+  transform: translateX(-100%);
+
+  animation: imageShimmer 1.8s ease-in-out infinite;
+
+  pointer-events: none;
+}
+
+.selected-image-preview img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  animation: imagePreviewIn 0.3s ease-out;
+}
+
+/* =========================
+   IMAGE INFORMATION
+========================= */
+
+.selected-image-info {
+  min-width: 0;
+
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-start;
+  justify-content: center;
+
+  gap: 2px;
+}
+
+.selected-image-info svg {
+  display: none;
+}
+
+.selected-image-info::after {
+  content: "Image";
+
+  font-size: 10px;
+
+  color: var(--app-muted);
+}
+
+.selected-image-info span {
+  width: 100%;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: 12px;
+
+  color: var(--app-text);
+}
+
+/* =========================
+   IMAGE REMOVE BUTTON
+========================= */
+
+.selected-image .remove-file-btn {
+  width: 25px;
+  height: 25px;
+
+  flex-shrink: 0;
+}
+
+/* =========================
+   UPLOAD ERROR
+========================= */
+
+.upload-error {
+  width: 100%;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: var(--app-danger);
+}
+
+/* =========================
+   ATTACHMENT ANIMATION
+========================= */
+
+@keyframes attachmentIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes imagePreviewIn {
+  from {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes imageShimmer {
+  0% {
+    transform: translateX(-120%);
+  }
+
+  55% {
+    transform: translateX(120%);
+  }
+
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+/* =========================
+   MOBILE ATTACHMENT
+========================= */
+
+@media (max-width: 480px) {
+  .input-controls {
+    gap: 8px;
+  }
+
+  .attach-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 9px;
+  }
+
+  .selected-image {
+    width: 215px;
+  }
+
+  .selected-file {
+    max-width: 260px;
+  }
+
+  .selected-file-info span {
+    max-width: 170px;
+  }
+}
+
+.input-controls {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.input-attachment-area {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  min-height: 0;
+}
+
+.input-main-row {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+/* =========================
+   INPUT ATTACHMENT LAYOUT
+========================= */
+
+.input-controls {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.input-attachment-area {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  min-height: 0;
+  animation: attachmentAreaIn 0.25s ease-out;
+}
+
+.input-main-row {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+
+/* =========================
+   COMPACT IMAGE CARD
+========================= */
+
+.selected-image {
+  position: relative;
+
+  width: 230px;
+  max-width: 100%;
+  height: 58px;
+
+  padding: 5px 7px;
+
+  margin: 0 0 7px 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+
+  background: var(--app-surface);
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+
+  animation:
+    attachmentCardIn 0.3s
+    cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+/* =========================
+   IMAGE THUMBNAIL
+========================= */
+
+.selected-image-preview {
+  position: relative;
+
+  width: 46px;
+  height: 46px;
+
+  min-width: 46px;
+
+  overflow: hidden;
+
+  border-radius: 7px;
+
+  background: var(--app-surface-raised);
+}
+
+.selected-image-preview img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  animation:
+    imageAttachmentIn 0.35s
+    cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+/* =========================
+   IMAGE LOADING SHIMMER
+========================= */
+
+.selected-image-preview::after {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: -100%;
+
+  width: 60%;
+  height: 100%;
+
+  background: linear-gradient(
+    100deg,
+    transparent,
+    var(--app-animation-ink),
+    transparent
+  );
+
+  animation: imageLoadingShimmer 1.6s ease-in-out infinite;
+
+  pointer-events: none;
+}
+
+
+/* =========================
+   IMAGE INFO
+========================= */
+
+.selected-image-info {
+  min-width: 0;
+
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+}
+
+.selected-image-info svg {
+  flex-shrink: 0;
+
+  color: var(--app-icon);
+}
+
+.selected-image-info span {
+  min-width: 0;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  font-size: 12px;
+
+  color: var(--app-text);
+}
+
+
+/* =========================
+   REMOVE BUTTON
+========================= */
+
+.selected-image .remove-file-btn {
+  width: 24px;
+  height: 24px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 50%;
+
+  background: var(--app-surface-raised);
+
+  color: var(--app-muted);
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+
+.selected-image .remove-file-btn:hover {
+  color: var(--app-text);
+
+  background: var(--app-border);
+
+  transform: scale(1.08);
+}
+
+
+/* =========================
+   PDF CARD
+========================= */
+
+.selected-file {
+  position: relative;
+
+  width: 230px;
+  max-width: 100%;
+  height: 58px;
+
+  padding: 5px 7px;
+
+  margin: 0 0 7px 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+
+  background: var(--app-surface);
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+
+  animation:
+    attachmentCardIn 0.3s
+    cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.selected-file-info {
+  min-width: 0;
+
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+}
+
+.selected-file-info svg {
+  width: 28px;
+  height: 28px;
+
+  padding: 6px;
+
+  flex-shrink: 0;
+
+  box-sizing: border-box;
+
+  border-radius: 7px;
+
+  color: var(--app-icon);
+
+  background: rgba(var(--app-accent-rgb), 0.08);
+}
+
+.selected-file-info span {
+  min-width: 0;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  font-size: 12px;
+
+  color: var(--app-text);
+}
+
+
+/* =========================
+   PDF LOADING EFFECT
+========================= */
+
+.selected-file::after {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: -100%;
+
+  width: 60%;
+  height: 100%;
+
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(var(--app-accent-rgb), 0.07),
+    transparent
+  );
+
+  animation: imageLoadingShimmer 1.8s ease-in-out infinite;
+
+  pointer-events: none;
+}
+
+
+/* =========================
+   ATTACHMENT ANIMATIONS
+========================= */
+
+@keyframes attachmentAreaIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes attachmentCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(7px) scale(0.94);
+  }
+
+  70% {
+    transform: translateY(-1px) scale(1.01);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes imageAttachmentIn {
+  from {
+    opacity: 0;
+    transform: scale(1.12);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes imageLoadingShimmer {
+  0% {
+    left: -100%;
+  }
+
+  55% {
+    left: 130%;
+  }
+
+  100% {
+    left: 130%;
+  }
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 480px) {
+  .input-main-row {
+    gap: 8px;
+  }
+
+  .input-footer-tools {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 4px 14px;
+  }
+
+  .prompt-template-toggle {
+    min-height: 36px;
+    font-size: 11px;
+  }
+
+  .input-shortcut-hint {
+    display: none;
+  }
+
+  .selected-image,
+  .selected-file {
+    width: 210px;
+  }
+}
+
+/* =========================
+   IMAGE FLY TO CHAT
+========================= */
+
+.flying-image {
+  position: fixed;
+
+  z-index: 99999;
+
+  object-fit: cover;
+
+  border-radius: 10px;
+
+  pointer-events: none;
+
+  box-shadow:
+    0 12px 35px var(--app-shadow-medium),
+    0 0 20px rgba(var(--app-accent-rgb), 0.12);
+
+  opacity: 1;
+
+  transform:
+    scale(1)
+    rotate(0deg);
+
+  transition:
+    left 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    top 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.45s ease,
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.input-shortcut-hint {
+  margin-top: 7px;
+  padding-right: 2px;
+  color: var(--app-muted);
+  font-size: 10px;
+  text-align: right;
+}
+
+.input-shortcut-hint kbd {
+  padding: 1px 4px;
+  border: 1px solid var(--app-border);
+  border-radius: 4px;
+  background: var(--app-input-bg);
+  color: var(--app-muted);
+  font: inherit;
+}
+
+.input-footer-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.prompt-template-toggle,
+.prompt-template-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--app-muted);
+  font-size: 10px;
+}
+
+.prompt-template-toggle:hover,
+.prompt-template-toggle.active,
+.prompt-template-add:hover {
+  color: var(--app-icon);
+}
+
+.image-generator-toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.image-generator-panel {
+  position: absolute;
+  z-index: 31;
+  right: 0;
+  bottom: 68px;
+  width: min(390px, calc(100vw - 32px));
+  display: grid;
+  gap: 10px;
+  padding: 13px;
+  border: 1px solid var(--app-border);
+  border-radius: 13px;
+  background: var(--app-bg);
+  box-shadow: 0 18px 45px var(--app-shadow-strong);
+}
+
+.image-generator-heading,
+.image-generator-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.image-generator-heading strong {
+  color: var(--app-input-text);
+  font-size: 12px;
+}
+
+.image-generator-heading span,
+.image-generator-footer > span {
+  color: var(--app-muted);
+  font-size: 10px;
+}
+
+.image-generator-panel textarea {
+  width: 100%;
+  min-height: 88px;
+  max-height: 180px;
+  padding: 10px;
+  resize: vertical;
+  border: 1px solid var(--app-border);
+  border-radius: 8px;
+  outline: none;
+  background: var(--app-bg);
+  color: var(--app-text);
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.image-generator-panel textarea:focus {
+  border-color: var(--app-icon);
+}
+
+.image-generator-panel textarea::placeholder {
+  color: var(--app-muted);
+}
+
+.image-generator-footer button {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 11px;
+  border-radius: 8px;
+  background: var(--app-button-action);
+  color: var(--app-button-action-text);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.image-generator-footer button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.image-generator-error {
+  margin: 0;
+  color: var(--app-danger);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.image-generator-spinner {
+  animation: imageGeneratorSpin 0.9s linear infinite;
+}
+
+@keyframes imageGeneratorSpin {
+  to { transform: rotate(360deg); }
+}
+
+.prompt-template-popover {
+  position: absolute;
+  z-index: 30;
+  right: 0;
+  bottom: 68px;
+  width: min(370px, calc(100vw - 32px));
+  max-height: min(430px, 65vh);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--app-border);
+  border-radius: 13px;
+  background: var(--app-bg);
+  box-shadow: 0 18px 45px var(--app-shadow-strong);
+}
+
+.prompt-template-heading {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 13px;
+  border-bottom: 1px solid var(--app-border);
+  color: var(--app-text);
+  font-size: 12px;
+}
+
+.prompt-template-list {
+  min-height: 0;
+  overflow-y: auto;
+  padding: 6px;
+}
+
+.prompt-template-row {
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+}
+
+.prompt-template-row:hover {
+  background: rgba(var(--app-accent-rgb), 0.08);
+}
+
+.prompt-template-item {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 9px 10px;
+  color: var(--app-text-secondary);
+  text-align: left;
+}
+
+.prompt-template-item strong {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.prompt-template-item span {
+  overflow: hidden;
+  color: var(--app-muted);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.prompt-template-delete {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  margin-right: 5px;
+  border-radius: 7px;
+  color: var(--app-muted);
+}
+
+.prompt-template-delete:hover {
+  background: var(--app-danger-bg);
+  color: var(--app-danger);
+}
+
+.prompt-template-form {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 10px;
+  border-top: 1px solid var(--app-border);
+}
+
+.prompt-template-form input,
+.prompt-template-form textarea {
+  width: 100%;
+  padding: 8px 9px;
+  border: 1px solid var(--app-border);
+  border-radius: 7px;
+  outline: none;
+  background: var(--app-bg);
+  color: var(--app-text);
+  font-size: 11px;
+}
+
+.prompt-template-form textarea {
+  min-height: 64px;
+  resize: vertical;
+}
+
+.prompt-template-form button {
+  min-height: 32px;
+  border-radius: 7px;
+  background: var(--app-button-action);
+  color: var(--app-button-action-text);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.prompt-template-form button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.voice-input-btn.listening {
+  position: relative;
+  border-color: var(--app-danger-border);
+  background: var(--app-danger-bg);
+  color: var(--app-danger);
+  animation: voicePulse 1.2s ease-in-out infinite;
+}
+
+.voice-input-btn.listening > svg {
+  animation: voiceMicBounce 0.65s ease-in-out infinite alternate;
+}
+
+.voice-waveform {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  width: 17px;
+  height: 14px;
+  padding: 2px 3px;
+  border: 1px solid var(--app-surface);
+  border-radius: 8px;
+  background: var(--app-danger);
+}
+
+.voice-waveform i {
+  width: 2px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--app-surface);
+  animation: voiceWave 0.55s ease-in-out infinite alternate;
+}
+
+.voice-waveform i:nth-child(2) { animation-delay: 0.18s; }
+.voice-waveform i:nth-child(3) { animation-delay: 0.34s; }
+
+@keyframes voicePulse {
+  50% { box-shadow: 0 0 0 5px color-mix(in srgb, var(--app-danger) 20%, transparent); }
+}
+
+@keyframes voiceMicBounce {
+  to { transform: scale(1.12); }
+}
+
+@keyframes voiceWave {
+  to { height: 9px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voice-input-btn.listening,
+  .voice-input-btn.listening > svg,
+  .voice-waveform i {
+    animation: none;
+  }
+}

@@ -1,0 +1,58 @@
+.neural-backdrop {
+  position: absolute;
+  z-index: 0;
+  inset: 64px 0 88px;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 38% 43%, color-mix(in srgb, var(--app-ai-primary) 24%, transparent), transparent 58%),
+    radial-gradient(ellipse at 68% 64%, color-mix(in srgb, var(--app-ai-glow) 14%, transparent), transparent 62%);
+  opacity: var(--app-neural-idle-opacity);
+  transition: opacity 1.4s ease;
+}
+
+.neural-backdrop.is-active { opacity: var(--app-neural-active-opacity); }
+.neural-backdrop svg { position: relative; z-index: 1; display: block; width: 100%; height: 100%; min-height: 280px; overflow: visible; }
+.neural-link { fill: none; stroke: var(--app-ai-network); stroke-width: 1; stroke-opacity: var(--app-neural-link-opacity); stroke-linecap: round; transition: stroke-opacity 1s ease, stroke-width 1s ease; animation: neural-link-pulse 8s ease-in-out infinite; }
+.neural-link:nth-of-type(3n) { stroke: var(--app-ai-glow); stroke-opacity: var(--app-neural-link-opacity); animation-delay: -2s; }
+.is-active .neural-link { stroke-opacity: var(--app-neural-link-active-opacity); stroke-width: 1.35; }
+.neural-node { fill: var(--app-ai-particle); opacity: var(--app-neural-node-opacity); }
+.neural-node-halo { fill: var(--app-ai-glow); opacity: var(--app-neural-halo-opacity); transition: opacity 1s ease; }
+.is-active .neural-node-halo { opacity: var(--app-neural-halo-active-opacity); }
+.neural-particle { fill: var(--app-ai-glow); opacity: 0.88; filter: drop-shadow(0 0 4px var(--app-ai-glow)); }
+.is-active .neural-particle { opacity: 1; filter: drop-shadow(0 0 7px var(--app-ai-glow)); }
+.neural-orbit { --orbit-angle: -18deg; position: absolute; left: 38.2%; top: 42%; z-index: 0; width: clamp(300px, 48vw, 650px); aspect-ratio: 1.9; border: 1px solid color-mix(in srgb, var(--app-ai-glow) 24%, transparent); border-radius: 50%; box-shadow: 0 0 34px color-mix(in srgb, var(--app-ai-primary) 9%, transparent), inset 0 0 28px color-mix(in srgb, var(--app-ai-glow) 5%, transparent); transform: translate(-50%, -50%) rotate(var(--orbit-angle)); animation: neural-orbit-drift 28s ease-in-out infinite alternate; transition: border-color 1s ease, opacity 1s ease; opacity: .66; }
+.neural-orbit-inner { --orbit-angle: 22deg; width: clamp(220px, 34vw, 460px); aspect-ratio: 2.15; border-color: color-mix(in srgb, var(--app-ai-network) 29%, transparent); animation-duration: 22s; animation-direction: alternate-reverse; opacity: .72; }
+.is-active .neural-orbit { opacity: .95; border-color: color-mix(in srgb, var(--app-ai-glow) 38%, transparent); }
+.is-active .neural-orbit-inner { border-color: color-mix(in srgb, var(--app-ai-network) 48%, transparent); }
+.neural-core {
+  position: absolute;
+  z-index: 2;
+  left: 38.2%;
+  top: 42%;
+  width: clamp(130px, 20vw, 240px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--app-ai-particle) 30%, transparent), color-mix(in srgb, var(--app-ai-glow) 44%, transparent) 28%, color-mix(in srgb, var(--app-ai-primary) 48%, transparent) 58%, transparent 74%);
+  transform: translate(-50%, -50%);
+  animation: neural-breathe 8s ease-in-out infinite;
+  transition: opacity 1s ease, filter 1s ease;
+}
+.is-active .neural-core { filter: brightness(1.8); animation-duration: 4.2s; }
+@keyframes neural-link-pulse { 0%, 100% { opacity: .72; } 50% { opacity: 1; } }
+@keyframes neural-orbit-drift { from { margin-left: -12px; transform: translate(-50%, -50%) rotate(var(--orbit-angle)) scale(.98); } to { margin-left: 12px; transform: translate(-50%, -50%) rotate(calc(var(--orbit-angle) + 8deg)) scale(1.02); } }
+@keyframes neural-breathe { 0%, 100% { opacity: 0.68; transform: translate(-50%, -50%) scale(.94); } 50% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); } }
+
+@media (max-width: 768px) {
+  .neural-backdrop { inset: 60px 0 80px; opacity: var(--app-neural-mobile-opacity); }
+  .neural-backdrop.is-active { opacity: var(--app-neural-mobile-active-opacity); }
+  .neural-core { left: 50%; }
+  .neural-orbit { left: 50%; width: min(86vw, 520px); }
+  .neural-orbit-inner { width: min(64vw, 390px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .neural-core, .neural-orbit, .neural-link { animation: none; }
+  .neural-link, .neural-node-halo, .neural-backdrop, .neural-orbit { transition: none; }
+  .neural-particle { display: none; }
+}

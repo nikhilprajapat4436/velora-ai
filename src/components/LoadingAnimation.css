@@ -1,0 +1,133 @@
+.premium-loader {
+  --loader-size: 94px;
+  min-height: 230px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 28px 20px;
+  color: var(--app-text);
+}
+
+.premium-loader-compact {
+  --loader-size: 68px;
+  min-height: 142px;
+  gap: 10px;
+  padding: 18px;
+}
+
+.premium-loader-orbit {
+  position: relative;
+  width: var(--loader-size);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+}
+
+.premium-loader-orbit::before {
+  position: absolute;
+  inset: 8%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--app-ai-glow) 17%, transparent), transparent 68%);
+  content: "";
+  animation: loaderAura 2.8s ease-in-out infinite;
+}
+
+.premium-loader-orbit-ring {
+  position: absolute;
+  width: 84%;
+  height: 40%;
+  border: 1px solid color-mix(in srgb, var(--app-ai-network) 56%, transparent);
+  border-radius: 50%;
+  box-shadow: 0 0 15px color-mix(in srgb, var(--app-ai-network) 14%, transparent);
+  transform: rotate(-35deg);
+  animation: loaderOrbit 5.6s linear infinite;
+}
+
+.premium-loader-ring-two {
+  width: 73%;
+  height: 60%;
+  border-color: color-mix(in srgb, var(--app-ai-glow) 60%, transparent);
+  transform: rotate(54deg);
+  animation-duration: 7.4s;
+  animation-direction: reverse;
+}
+
+.premium-loader-core {
+  width: 38%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--app-ai-glow) 48%, var(--app-border));
+  border-radius: 28%;
+  background: color-mix(in srgb, var(--app-surface) 78%, var(--app-ai-primary));
+  box-shadow: 0 0 24px color-mix(in srgb, var(--app-ai-glow) 21%, transparent), inset 0 0 18px color-mix(in srgb, var(--app-ai-glow) 11%, transparent);
+  color: var(--app-ai-glow);
+  animation: loaderCore 2.4s ease-in-out infinite;
+}
+
+.premium-loader-signal {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--app-ai-glow);
+  box-shadow: 0 0 10px var(--app-ai-glow);
+  animation: loaderSignal 1.9s ease-in-out infinite;
+}
+
+.premium-loader-signal-one { top: 18%; left: 29%; }
+.premium-loader-signal-two { right: 17%; bottom: 28%; width: 4px; height: 4px; animation-delay: -.95s; }
+
+.premium-loader-message {
+  color: var(--app-text-secondary);
+  font-size: 12px;
+  font-weight: 550;
+  letter-spacing: .025em;
+  text-align: center;
+}
+
+.premium-loader-track {
+  position: relative;
+  width: 74px;
+  height: 2px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--app-ai-network) 22%, transparent);
+}
+
+.premium-loader-track > span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 38%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--app-ai-network), var(--app-ai-glow));
+  box-shadow: 0 0 10px color-mix(in srgb, var(--app-ai-glow) 65%, transparent);
+  animation: loaderTrack 1.55s cubic-bezier(.45, 0, .55, 1) infinite;
+}
+
+@keyframes loaderOrbit { to { rotate: 360deg; } }
+@keyframes loaderCore { 0%, 100% { transform: scale(.94); } 50% { transform: scale(1.06); } }
+@keyframes loaderAura { 0%, 100% { opacity: .55; transform: scale(.88); } 50% { opacity: 1; transform: scale(1.12); } }
+@keyframes loaderSignal { 0%, 100% { opacity: .32; transform: scale(.7); } 50% { opacity: 1; transform: scale(1.45); } }
+@keyframes loaderTrack { from { transform: translateX(-120%); } to { transform: translateX(280%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .premium-loader-orbit::before,
+  .premium-loader-orbit-ring,
+  .premium-loader-core,
+  .premium-loader-signal,
+  .premium-loader-track > span { animation: none; }
+  .premium-loader-track > span { left: 31%; }
+}
+
+:root[data-reduce-motion="true"] .premium-loader-orbit::before,
+:root[data-reduce-motion="true"] .premium-loader-orbit-ring,
+:root[data-reduce-motion="true"] .premium-loader-core,
+:root[data-reduce-motion="true"] .premium-loader-signal,
+:root[data-reduce-motion="true"] .premium-loader-track > span { animation: none; }
+:root[data-reduce-motion="true"] .premium-loader-track > span { left: 31%; }
