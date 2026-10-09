@@ -75,15 +75,21 @@ jobs:
         env:
           APK_PATH: android/app/build/outputs/apk/debug/app-debug.apk
         run: |
-          SHA1="$(apksigner verify --print-certs "$APK_PATH" | sed -n 's/^Signer #1 certificate SHA-1 digest: //p')"
+          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
+          APKSIGNER="$(find "$SDK_ROOT/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          if [ -z "$APKSIGNER" ]; then
+            echo "Could not find Android SDK apksigner." >&2
+            exit 1
+          fi
+          SHA1="$("$APKSIGNER" verify --print-certs "$APK_PATH" | sed -n 's/^Signer #1 certificate SHA-1 digest: //p')"
           if [ -z "$SHA1" ]; then
             echo "Could not read the APK signing certificate fingerprint." >&2
             exit 1
           fi
           {
             echo "## Android Google Sign-In setup"
-            echo "- Android package: `com.velora.ai`"
-            echo "- APK signing SHA-1: `$SHA1`"
+            echo "- Android package: com.velora.ai"
+            echo "- APK signing SHA-1: $SHA1"
             if [ -z "${ANDROID_DEBUG_KEYSTORE:-}" ]; then
               echo "- This run used GitHub's temporary debug key. Configure the four ANDROID_DEBUG_KEYSTORE_* repository secrets to keep the fingerprint stable across future APKs."
             else
