@@ -271,7 +271,11 @@ function Chat({
       const generatedImage = {
         role: "assistant",
         content: "Generated image",
-        image: { name: "generated-image.png", type: "image/png", data: data.image },
+        image: {
+          name: `generated-image.${data.mimeType === "image/jpeg" ? "jpg" : data.mimeType === "image/webp" ? "webp" : "png"}`,
+          type: data.mimeType || "image/png",
+          data: data.image,
+        },
         createdAt: new Date().toISOString(),
       };
       setMessages((previousMessages) => [...previousMessages, generatedImage]);
