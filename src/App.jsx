@@ -6,7 +6,7 @@ import RegisterPage from "./pages/RegisterPage";
 import AuthIntro from "./components/Auth/AuthIntro";
 import LoadingAnimation from "./components/LoadingAnimation";
 import AndroidDownloadPrompt from "./components/AndroidDownloadPrompt";
-import { applyThemePalette, getSavedThemePalette } from "./themePalettes";
+import { clearInterfaceColors, COLOR_PREFERENCES_KEY } from "./colorPreferences";
 import { apiUrl } from "./api";
 import { lazy, Suspense, useState, useRef, useEffect, useMemo, useCallback } from "react";
 
@@ -74,9 +74,6 @@ const loadLocalChatCache = () => {
 };
 
 function App() {
-  useEffect(() => {
-    applyThemePalette(getSavedThemePalette());
-  }, []);
   const [messages, setMessages] = useState(() => loadLocalChatCache().draft);
   const [isThinking, setIsThinking] = useState(false);
   const [chatSaveStatus, setChatSaveStatus] = useState("saved");
@@ -675,11 +672,11 @@ function App() {
     } catch {
       localStorage.removeItem("ai-assistant-chats");
     }
-    ["ai-assistant-preferences", "ai-assistant-chat-size", "ai-assistant-accent", "ai-assistant-prompt-templates"].forEach((key) => localStorage.removeItem(key));
+    ["ai-assistant-preferences", "ai-assistant-chat-size", "ai-assistant-accent", COLOR_PREFERENCES_KEY, "ai-assistant-prompt-templates"].forEach((key) => localStorage.removeItem(key));
     document.documentElement.dataset.chatSize = "default";
     delete document.documentElement.dataset.reduceMotion;
     delete document.documentElement.dataset.highContrast;
-    applyThemePalette("royal-emerald");
+    clearInterfaceColors();
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     chatSelectionVersionRef.current += 1;

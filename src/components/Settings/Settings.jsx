@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Accessibility, Brain, Check, Download, ImagePlus, KeyRound, MessageSquare, Palette, Save, ShieldCheck, SlidersHorizontal, Trash2, UserRound } from "lucide-react";
+import { Accessibility, Brain, Check, Download, ImagePlus, KeyRound, MessageSquare, Paintbrush, Save, ShieldCheck, SlidersHorizontal, Trash2, UserRound } from "lucide-react";
 import { apiUrl } from "../../api";
 import MemoryManagement from "../MemoryManagement/MemoryManagement";
-import { applyThemePalette, themePalettes } from "../../themePalettes";
+import { applyInterfaceColors, COLOR_PREFERENCES_KEY, DEFAULT_INTERFACE_COLORS, readInterfaceColors } from "../../colorPreferences";
 import "./Settings.css";
 
 const avatarOptions = ["🌙", "🚀", "🦊", "🐼", "🐯", "🐸", "🐧", "🐨"];
@@ -73,19 +73,7 @@ function Settings({ user, onUserUpdated, onBack, onClearChatHistory, onLogout, o
   const [newPassword, setNewPassword] = useState("");
   const [deleteConfirmation, setDeleteConfirmation] = useState("");
   const [deletePassword, setDeletePassword] = useState("");
-  const [accent, setAccent] = useState(() => {
-    try {
-      const savedAccent = localStorage.getItem("ai-assistant-accent");
-      if (savedAccent === "elegant-light") return "pearl-sage";
-      if (savedAccent === "indigo") return "royal-futuristic";
-      if (savedAccent === "cyan") return "royal-futuristic";
-      if (savedAccent === "rose") return "midnight-luxury";
-      if (savedAccent === "emerald") return "royal-emerald";
-      return themePalettes.some((option) => option.id === savedAccent) ? savedAccent : "royal-emerald";
-    } catch {
-      return "royal-emerald";
-    }
-  });
+  const [interfaceColors, setInterfaceColors] = useState(readInterfaceColors);
   const [chatSize, setChatSize] = useState(() => {
     try {
       const savedSize = localStorage.getItem("ai-assistant-chat-size");
@@ -95,14 +83,7 @@ function Settings({ user, onUserUpdated, onBack, onClearChatHistory, onLogout, o
     }
   });
 
-  useEffect(() => {
-    applyThemePalette(accent);
-    try {
-      localStorage.setItem("ai-assistant-accent", accent);
-    } catch {
-      // Accent still applies for this session when browser storage is unavailable.
-    }
-  }, [accent]);
+  useEffect(() => applyInterfaceColors(interfaceColors), [interfaceColors]);
 
   useEffect(() => {
     document.documentElement.dataset.chatSize = chatSize;
@@ -118,8 +99,26 @@ function Settings({ user, onUserUpdated, onBack, onClearChatHistory, onLogout, o
     document.documentElement.dataset.highContrast = preferences.highContrast ? "true" : "false";
   }, [preferences.reduceMotion, preferences.highContrast]);
 
-  const selectAccent = (accentId) => {
-    setAccent(accentId);
+  const updateInterfaceColor = (key, value) => {
+    const next = { ...interfaceColors, [key]: value };
+    setInterfaceColors(next);
+    applyInterfaceColors(next);
+    try {
+      localStorage.setItem(COLOR_PREFERENCES_KEY, JSON.stringify(next));
+    } catch {
+      // Keep the selected color for this session when storage is unavailable.
+    }
+  };
+
+  const resetInterfaceColors = () => {
+    const defaults = { ...DEFAULT_INTERFACE_COLORS };
+    setInterfaceColors(defaults);
+    applyInterfaceColors(defaults);
+    try {
+      localStorage.removeItem(COLOR_PREFERENCES_KEY);
+    } catch {
+      // The defaults still apply for this session when storage is unavailable.
+    }
   };
 
   const savePreferences = (event) => {
@@ -191,7 +190,7 @@ function Settings({ user, onUserUpdated, onBack, onClearChatHistory, onLogout, o
         ...data,
         localPreferences: {
           responseAndAccessibility: JSON.parse(localStorage.getItem("ai-assistant-preferences") || "{}"),
-          palette: localStorage.getItem("ai-assistant-accent"),
+          interfaceColors: readInterfaceColors(),
           chatTextSize: localStorage.getItem("ai-assistant-chat-size"),
         },
       };
@@ -340,7 +339,7 @@ function Settings({ user, onUserUpdated, onBack, onClearChatHistory, onLogout, o
           className={`settings-nav-item ${section === "appearance" ? "active" : ""}`}
           onClick={() => setSection("appearance")}
         >
-          <Palette size={17} />
+          <Paintbrush size={17} />
           <span>Appearance</span>
         </button>
 
@@ -357,32 +356,35 @@ function Settings({ user, onUserUpdated, onBack, onClearChatHistory, onLogout, o
             <header className="settings-page-header">
               <p className="settings-eyebrow">PERSONALIZATION</p>
               <h1>Appearance</h1>
-          <p>Choose a complete visual theme for your assistant.</p>
+              <p>Choose the text and container colors used in the interface.</p>
             </header>
 
             <section className="settings-profile-card settings-appearance-card">
               <div className="settings-card-heading">
                 <div>
-                  <h2>Color palette</h2>
-                  <p>Each palette updates the complete interface and AI animations immediately.</p>
+                  <h2>Interface colors</h2>
+                  <p>Customize the text and container colors. Your choices are saved on this device.</p>
                 </div>
               </div>
-              <div className="settings-theme-options" role="group" aria-label="Color palette">
-                {themePalettes.map((option) => (
-                  <button
-                    key={option.id}
-                    type="button"
-                    className={`settings-theme-option ${accent === option.id ? "selected" : ""}`}
-                    aria-pressed={accent === option.id}
-                    onClick={() => selectAccent(option.id)}
-                  >
-                    <span className="settings-theme-swatch palette-theme-swatch" style={{ "--swatch-color": option.color, "--swatch-base": option.base, "--swatch-primary": option.primary, "--swatch-soft": option.soft }}>
-                      {accent === option.id && <Check size={16} />}
-                    </span>
-                    <span>{option.label}</span>
-                    <small className="settings-theme-mode">{option.mode === "dark" ? "Dark" : "Light"}</small>
-                  </button>
-                ))}
+              <div className="settings-color-controls">
+                <label className="settings-color-row" htmlFor="interface-text-color">
+                  <span><strong>Text color</strong><small>Changes primary interface text.</small></span>
+                  <span className="settings-color-input-wrap">
+                    <code>{interfaceColors.text.toUpperCase()}</code>
+                    <input id="interface-text-color" type="color" value={interfaceColors.text} onChange={(event) => updateInterfaceColor("text", event.target.value)} aria-label="Choose text color" />
+                  </span>
+                </label>
+                <label className="settings-color-row" htmlFor="interface-container-color">
+                  <span><strong>Container color</strong><small>Changes cards, fields and message surfaces.</small></span>
+                  <span className="settings-color-input-wrap">
+                    <code>{interfaceColors.container.toUpperCase()}</code>
+                    <input id="interface-container-color" type="color" value={interfaceColors.container} onChange={(event) => updateInterfaceColor("container", event.target.value)} aria-label="Choose container color" />
+                  </span>
+                </label>
+              </div>
+              <div className="settings-color-footer">
+                <small>For comfortable reading, choose colors with enough contrast.</small>
+                <button type="button" className="settings-color-reset" onClick={resetInterfaceColors}>Reset colors</button>
               </div>
             </section>
 

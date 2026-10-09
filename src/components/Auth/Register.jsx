@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./Auth.css";
 import { Sparkles } from "lucide-react";
 import { apiUrl } from "../../api";
-import { applyThemePalette, getSavedThemePalette, themePalettes } from "../../themePalettes";
 
 function Register({ onLogin , onRegisterSuccess }) {
   const [formData, setFormData] = useState({
@@ -13,12 +12,6 @@ function Register({ onLogin , onRegisterSuccess }) {
 
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [palette, setPalette] = useState(getSavedThemePalette);
-
-  useEffect(() => {
-    applyThemePalette(palette);
-  }, [palette]);
-
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -49,9 +42,6 @@ function Register({ onLogin , onRegisterSuccess }) {
 
       localStorage.setItem("token", data.token);
 localStorage.setItem("user", JSON.stringify(data.user));
-localStorage.setItem("ai-assistant-accent", palette);
-document.documentElement.dataset.accent = palette;
-
 onRegisterSuccess();
 
 setMessage("Registration successful!");
@@ -75,25 +65,6 @@ setMessage("Registration successful!");
             <label className="auth-field"><span>Your name</span><input type="text" name="name" placeholder="How should we call you?" autoComplete="name" value={formData.name} onChange={handleChange} minLength={2} maxLength={40} required /></label>
             <label className="auth-field"><span>Email address</span><input type="email" name="email" placeholder="you@example.com" autoComplete="email" value={formData.email} onChange={handleChange} required /></label>
             <label className="auth-field"><span>Password</span><input type="password" name="password" placeholder="Create a password" autoComplete="new-password" value={formData.password} onChange={handleChange} required /></label>
-
-            <fieldset className="auth-palette-picker">
-              <legend>Choose your color palette</legend>
-              <div className="auth-palette-grid">
-                {themePalettes.map((option) => (
-                  <button
-                    key={option.id}
-                    type="button"
-                    className={`auth-palette-option${palette === option.id ? " selected" : ""}`}
-                    aria-pressed={palette === option.id}
-                    onClick={() => setPalette(option.id)}
-                  >
-                    <span className="auth-palette-swatch" style={{ "--palette-base": option.base, "--palette-primary": option.primary, "--palette-accent": option.color, "--palette-soft": option.soft }} aria-hidden="true" />
-                    <span className="auth-palette-copy"><strong>{option.label}</strong><small>{option.mood}</small></span>
-                    {palette === option.id && <span className="auth-palette-check" aria-hidden="true">✓</span>}
-                  </button>
-                ))}
-              </div>
-            </fieldset>
 
             <button className="auth-submit-btn" type="submit" disabled={loading}>
               {loading ? "Creating account…" : "Create account"}

@@ -124,42 +124,6 @@
 .auth-field input::placeholder { color: var(--app-muted); opacity: .8; }
 .auth-field input:focus { border-color: var(--app-focus); box-shadow: 0 0 0 3px color-mix(in srgb, var(--app-focus) 16%, transparent); }
 
-.auth-palette-picker {
-  min-width: 0;
-  margin: 2px 0 17px;
-  padding: 0;
-  border: 0;
-}
-.auth-palette-picker legend {
-  margin-bottom: 9px;
-  color: var(--app-text-secondary);
-  font-size: 11px;
-  font-weight: 650;
-}
-.auth-palette-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-.auth-palette-option {
-  position: relative;
-  min-width: 0;
-  min-height: 58px;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 8px 23px 8px 9px;
-  border: 1px solid var(--app-border);
-  border-radius: 10px;
-  background: var(--app-input-bg);
-  color: var(--app-text);
-  cursor: pointer;
-  text-align: left;
-  transition: border-color .16s ease, background .16s ease, transform .16s ease;
-}
-.auth-palette-option:hover { border-color: var(--app-accent); transform: translateY(-1px); }
-.auth-palette-option.selected { border-color: var(--app-accent); background: color-mix(in srgb, var(--app-accent) 9%, var(--app-input-bg)); box-shadow: 0 0 0 2px color-mix(in srgb, var(--app-accent) 14%, transparent); }
-.auth-palette-swatch { width: 25px; height: 25px; flex: 0 0 25px; border: 1px solid color-mix(in srgb, var(--palette-primary) 25%, transparent); border-radius: 50%; background: linear-gradient(135deg, var(--palette-base) 0 34%, var(--palette-primary) 35% 59%, var(--palette-accent) 60% 78%, var(--palette-soft) 79%); }
-.auth-palette-copy { min-width: 0; display: grid; gap: 3px; }
-.auth-palette-copy strong { overflow: hidden; font-size: 10px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
-.auth-palette-copy small { overflow: hidden; color: var(--app-muted); font-size: 8px; text-overflow: ellipsis; white-space: nowrap; }
-.auth-palette-check { position: absolute; top: 5px; right: 7px; color: var(--app-accent); font-size: 12px; font-weight: 800; }
 
 .auth-form .auth-submit-btn {
   width: 100%;
@@ -317,9 +281,6 @@
   .auth-panel { padding: 21px 18px; }
   .auth-form { padding-top: 28px; }
   .auth-form h1 { font-size: 29px; }
-  .auth-palette-grid { gap: 6px; }
-  .auth-palette-option { gap: 7px; padding-left: 7px; }
-  .auth-palette-copy small { font-size: 7px; }
   .auth-google-button { transform: scale(.88); }
 }
 
