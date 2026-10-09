@@ -35,10 +35,24 @@ createRoot(document.getElementById('root')).render(
   </StrictMode>,
 )
 
-if (import.meta.env.PROD && "serviceWorker" in navigator) {
+const isNativeApp = Capacitor.isNativePlatform()
+
+if (import.meta.env.PROD && !isNativeApp && "serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("/sw.js").catch((error) => {
       console.error("Service worker registration failed:", error);
     });
   });
+}
+
+if (isNativeApp && "serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations()
+    .then((registrations) => Promise.all(registrations.map((registration) => registration.unregister())))
+    .then(() => caches.keys())
+    .then((cacheKeys) => Promise.all(
+      cacheKeys
+        .filter((key) => key.startsWith("velora-ai-shell-") || key.startsWith("ai-assistant-shell-"))
+        .map((key) => caches.delete(key)),
+    ))
+    .catch((error) => console.warn("Could not clear the old web cache in the Android app:", error));
 }
