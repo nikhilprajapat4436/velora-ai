@@ -16,6 +16,7 @@
     "@capacitor/android": "^8.5.3",
     "@capacitor/cli": "^8.5.3",
     "@capacitor/core": "^8.5.3",
+    "@capgo/capacitor-social-login": "^8.5.15",
     "@google/genai": "^2.27.0",
     "@huggingface/transformers": "^4.3.1",
     "@react-oauth/google": "^0.13.5",

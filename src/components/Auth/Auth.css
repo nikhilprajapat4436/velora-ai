@@ -156,6 +156,26 @@
 .auth-divider::after { height: 1px; flex: 1; background: var(--app-border); content: ""; }
 .auth-google-button { display: flex; justify-content: center; min-height: 40px; }
 .auth-google-button > div { max-width: 100%; }
+.auth-native-google-btn {
+  width: 360px;
+  max-width: 100%;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  background: #fff;
+  color: #3c4043;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.auth-native-google-btn:hover:not(:disabled) { background: #f8faff; box-shadow: 0 1px 2px rgba(60, 64, 67, .2); }
+.auth-native-google-btn:disabled { cursor: wait; opacity: .72; }
+.auth-google-g { color: #4285f4; font-size: 18px; font-weight: 700; }
 
 .auth-form .auth-message {
   margin: 14px 0 0;

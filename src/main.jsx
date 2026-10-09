@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { Capacitor } from "@capacitor/core"
 import './index.css'
 import App from './App.jsx'
 import { GoogleOAuthProvider } from "@react-oauth/google"
@@ -28,9 +29,9 @@ try {
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <GoogleOAuthProvider clientId={googleClientId}>
-      <App />
-    </GoogleOAuthProvider>
+    {Capacitor.isNativePlatform()
+      ? <App />
+      : <GoogleOAuthProvider clientId={googleClientId}><App /></GoogleOAuthProvider>}
   </StrictMode>,
 )
 

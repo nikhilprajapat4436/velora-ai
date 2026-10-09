@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 
+def ciDebugKeystorePath = System.getenv('ANDROID_DEBUG_KEYSTORE')
+
 android {
     namespace = "com.velora.ai"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -16,7 +18,20 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    if (ciDebugKeystorePath) {
+        signingConfigs {
+            ciDebug {
+                storeFile file(ciDebugKeystorePath)
+                storePassword System.getenv('ANDROID_DEBUG_KEYSTORE_PASSWORD')
+                keyAlias System.getenv('ANDROID_DEBUG_KEY_ALIAS')
+                keyPassword System.getenv('ANDROID_DEBUG_KEY_PASSWORD')
+            }
+        }
+    }
     buildTypes {
+        debug {
+            if (ciDebugKeystorePath) signingConfig signingConfigs.ciDebug
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

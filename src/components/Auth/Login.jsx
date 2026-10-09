@@ -1,8 +1,10 @@
 import { useState } from "react";
 import "./Auth.css";
 import { GoogleLogin } from "@react-oauth/google";
+import { Capacitor } from "@capacitor/core";
 import { Sparkles } from "lucide-react";
 import { apiUrl } from "../../api";
+import { getNativeGoogleCredential } from "../../nativeGoogleAuth";
 
 function Login({ onRegister, onLoginSuccess, isIntroRevealing = false }) {
   const [formData, setFormData] = useState({
@@ -12,10 +14,53 @@ function Login({ onRegister, onLoginSuccess, isIntroRevealing = false }) {
 
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const isNativeApp = Capacitor.isNativePlatform();
   const finishLogin = (data) => {
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(data.user));
     onLoginSuccess();
+  };
+
+  const completeGoogleLogin = async (credential) => {
+    const response = await fetch(apiUrl("/api/auth/google"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ credential }),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message || "Google login failed");
+    finishLogin(data);
+  };
+
+  const handleGoogleCredential = async (credential) => {
+    setLoading(true);
+    setMessage("");
+    try {
+      await completeGoogleLogin(credential);
+    } catch (error) {
+      setMessage(error.message || "Google login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleNativeGoogleLogin = async () => {
+    setLoading(true);
+    setMessage("");
+    try {
+      const credential = await getNativeGoogleCredential();
+      await completeGoogleLogin(credential);
+    } catch (error) {
+      const detail = String(error?.message || "").toLowerCase();
+      if (detail.includes("cancel")) setMessage("Google sign-in was cancelled.");
+      else if (detail.includes("28444") || detail.includes("developer console")) {
+        setMessage("Google Sign-In needs the Android package and signing SHA-1 registered in Google Cloud.");
+      } else {
+        setMessage("Google sign-in could not finish. Check Android OAuth setup and try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -73,34 +118,21 @@ function Login({ onRegister, onLoginSuccess, isIntroRevealing = false }) {
 
             <div className="auth-divider"><span>or continue with</span></div>
             <div className="auth-google-button">
-              <GoogleLogin
-                onSuccess={async (credentialResponse) => {
-                  try {
-                    setLoading(true);
-                    setMessage("");
-
-                    const response = await fetch(apiUrl("/api/auth/google"), {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({ credential: credentialResponse.credential }),
-                    });
-
-                    const data = await response.json();
-                    if (!response.ok) throw new Error(data.message || "Google login failed");
-
-                    finishLogin(data);
-                  } catch (error) {
-                    setMessage(error.message);
-                  } finally {
-                    setLoading(false);
-                  }
-                }}
-                onError={() => setMessage("Google login failed")}
-                width="360"
-                text="signin_with"
-                shape="rectangular"
-                theme="outline"
-              />
+              {isNativeApp ? (
+                <button className="auth-native-google-btn" type="button" onClick={handleNativeGoogleLogin} disabled={loading}>
+                  <span className="auth-google-g" aria-hidden="true">G</span>
+                  {loading ? "Connecting to Google…" : "Sign in with Google"}
+                </button>
+              ) : (
+                <GoogleLogin
+                  onSuccess={(credentialResponse) => void handleGoogleCredential(credentialResponse.credential)}
+                  onError={() => setMessage("Google login failed")}
+                  width="360"
+                  text="signin_with"
+                  shape="rectangular"
+                  theme="outline"
+                />
+              )}
             </div>
 
             {message && <p className="auth-message" role="alert">{message}</p>}

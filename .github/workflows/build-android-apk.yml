@@ -23,6 +23,8 @@ permissions:
 jobs:
   build-apk:
     runs-on: ubuntu-latest
+    env:
+      ANDROID_DEBUG_KEYSTORE_BASE64: ${{ secrets.ANDROID_DEBUG_KEYSTORE_BASE64 }}
     steps:
       - name: Check out source
         uses: actions/checkout@v7
@@ -39,6 +41,27 @@ jobs:
           distribution: temurin
           java-version: "21"
 
+      - name: Configure persistent Android signing key when available
+        if: ${{ env.ANDROID_DEBUG_KEYSTORE_BASE64 != '' }}
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_DEBUG_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_DEBUG_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_DEBUG_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_DEBUG_KEY_PASSWORD }}
+        run: |
+          for name in KEYSTORE_PASSWORD KEY_ALIAS KEY_PASSWORD; do
+            if [ -z "${!name}" ]; then
+              echo "Missing Android signing secret: $name" >&2
+              exit 1
+            fi
+          done
+          KEYSTORE_PATH="$RUNNER_TEMP/velora-debug.keystore"
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$KEYSTORE_PATH"
+          echo "ANDROID_DEBUG_KEYSTORE=$KEYSTORE_PATH" >> "$GITHUB_ENV"
+          echo "ANDROID_DEBUG_KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD" >> "$GITHUB_ENV"
+          echo "ANDROID_DEBUG_KEY_ALIAS=$KEY_ALIAS" >> "$GITHUB_ENV"
+          echo "ANDROID_DEBUG_KEY_PASSWORD=$KEY_PASSWORD" >> "$GITHUB_ENV"
+
       - name: Install dependencies
         run: npm ci
 
@@ -47,6 +70,26 @@ jobs:
 
       - name: Assemble installable test APK
         run: bash android/gradlew --no-daemon -p android assembleDebug
+
+      - name: Report Google Sign-In certificate fingerprint
+        env:
+          APK_PATH: android/app/build/outputs/apk/debug/app-debug.apk
+        run: |
+          SHA1="$(apksigner verify --print-certs "$APK_PATH" | sed -n 's/^Signer #1 certificate SHA-1 digest: //p')"
+          if [ -z "$SHA1" ]; then
+            echo "Could not read the APK signing certificate fingerprint." >&2
+            exit 1
+          fi
+          {
+            echo "## Android Google Sign-In setup"
+            echo "- Android package: `com.velora.ai`"
+            echo "- APK signing SHA-1: `$SHA1`"
+            if [ -z "${ANDROID_DEBUG_KEYSTORE:-}" ]; then
+              echo "- This run used GitHub's temporary debug key. Configure the four ANDROID_DEBUG_KEYSTORE_* repository secrets to keep the fingerprint stable across future APKs."
+            else
+              echo "- Persistent signing key detected; this fingerprint remains stable across builds."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload APK workflow artifact
         uses: actions/upload-artifact@v7
